@@ -1,0 +1,35 @@
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --dark-color: #343a40;
+  --light-color: #f8f9fa;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+  --info-color: #17a2b8;
+  --warning-color: #ffc107;
+  --font-size: 1rem;
+  --line-height: 1.6;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #333b41;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  /* Arrow keys will trigger scrolling in browsers, so we set overflow 
+  to hidden to the body itself so that does not happen */
+  overflow-x: hidden;
+}
+
+.game-container {
+  position: relative;
+  // this will set up the screen in the center of the page - not the same as in the html file where
+  // we set the canvas width=352 and height=198.  This is the container that holds the canvas
+  // and we are setting the width and height independently so that we can zoom in and out of the game
+  width: 352px;
+  height: 198px;
+  outline: 1px solid #ffffff;
+  margin: 0 auto;
+  margin-top: 50px;
+}
