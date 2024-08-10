@@ -21,15 +21,24 @@ body {
   to hidden to the body itself so that does not happen */
   overflow-x: hidden;
 }
-
+ 
+/* this will set up the screen in the center of the page - not the same as in the html file where
+  we set the canvas width=352 and height=198.  This is the container that holds the canvas
+  and we are setting the width and height independently so that we can zoom in and out of the game */
 .game-container {
   position: relative;
-  // this will set up the screen in the center of the page - not the same as in the html file where
-  // we set the canvas width=352 and height=198.  This is the container that holds the canvas
-  // and we are setting the width and height independently so that we can zoom in and out of the game
+
   width: 352px;
   height: 198px;
   outline: 1px solid #ffffff;
   margin: 0 auto;
-  margin-top: 50px;
+  /* we can scale the entire game up or down by changing the scale property
+  when we do this it scales from the middle, so we need to push it down 50% 
+  of the height of the container */
+  transform: scale(4) translateY(50%);
+}
+
+.game-container canvas {
+  /* tells the browser to evenly render the pixels and not adjust for scale */
+  image-rendering: pixelated;
 }
