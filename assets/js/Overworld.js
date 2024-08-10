@@ -13,6 +13,12 @@ class Overworld {
   }
 
   init() {
-    console.log("Overworld initialized", this);
+    // canvas in HTML needs to have images loaded into the browser memory before we can draw them into the canvas context
+    const image = new Image();
+    image.onload = () => {
+      // draw the image into the canvas context using the drawImage method
+      this.ctx.drawImage(image, 0, 0);
+    };
+    image.src = "/assets/images/maps/DemoLower.png";
   }
 }
