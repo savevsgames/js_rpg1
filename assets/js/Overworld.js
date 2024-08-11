@@ -26,10 +26,18 @@ class Overworld {
       // we will need to subtract half of the canvas width and height to center the hero and then subtract
       // the hero's position from the canvas and any other objects in the scene, allowing them to move relative to the hero
       const cameraPerson = this.map.gameObjects.hero;
+      // update all objects in the game - can be a performance issue with a large game
+      Object.values(this.map.gameObjects).forEach((object) => {
+        //  because the cameraPerson will be neeeded to center the hero, and every other object will move relative to the hero
+        //  we will want to make sure the CameraPerson is passed in before we draw anything
+        object.update({
+          arrow: this.directionInput.direction,
+          //  we have separated this Object values loop, to first be able to update the hero's position
+        });
+      });
 
       // start drawning the lower image of the map - passing this.ctx so it knows what to draw to
-      this.map.drawLowerImage(this.ctx);
-
+      this.map.drawLowerImage(this.ctx, cameraPerson);
       // draw the game objects on the map
       // we have an object (gameObjects) of objects within the map object
       // loop through the game objects and draw them to this canvas context
@@ -37,14 +45,18 @@ class Overworld {
       Object.values(this.map.gameObjects).forEach((object) => {
         //  we will give the object a method to update the object - this will be used to update the object's state
         //  it can take some parameters to help it know what needs to have its state updated
+        //  because the cameraPerson will be neeeded to center the hero, and every other object will move relative to the hero
+        //  we will want to make sure the CameraPerson is passed in before we draw anything
         object.update({
           arrow: this.directionInput.direction,
         });
         // this above line will move the objects all to the right as the game loop runs
-        object.sprite.draw(this.ctx);
+        // we pass in the cameraPerson so we can center the camera on the hero
+        object.sprite.draw(this.ctx, cameraPerson);
       });
+
       // draw the upper image of the map - this will draw on top of the other game objects
-      this.map.drawUpperImage(this.ctx);
+      this.map.drawUpperImage(this.ctx, cameraPerson);
 
       // we want this to call every frame, so we will use requestAnimationFrame to call the function recursively
       //  it is a built-in function that will call the function every frame

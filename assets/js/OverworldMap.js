@@ -14,13 +14,22 @@ class OverworldMap {
     // the map will be drawn into the canvas element - but must be drawn in the correct order
   }
 
-  drawLowerImage(ctx) {
+  drawLowerImage(ctx, cameraPerson) {
     // draw the lower image first
-    ctx.drawImage(this.lowerImg, 0, 0);
+
+    ctx.drawImage(
+      this.lowerImg,
+      utils.withGrid(10.5) - cameraPerson.x,
+      utils.withGrid(6) - cameraPerson.y
+    );
   }
-  drawUpperImage(ctx) {
+  drawUpperImage(ctx, cameraPerson) {
     // draw the lower image first
-    ctx.drawImage(this.upperImg, 0, 0);
+    ctx.drawImage(
+      this.upperImg,
+      utils.withGrid(10.5) - cameraPerson.x,
+      utils.withGrid(6) - cameraPerson.y
+    );
   }
 }
 

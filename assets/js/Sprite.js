@@ -108,9 +108,10 @@ class Sprite {
   }
 
   // FUNCTION TO DRAW THE SPRITE
-  draw(ctx) {
-    const x = this.gameObject.x - 8;
-    const y = this.gameObject.y - 18;
+  draw(ctx, cameraPerson) {
+    // we can use the cameraPerson to center the camera on the hero
+    const x = this.gameObject.x - 8 + utils.withGrid(10.5) - cameraPerson.x;
+    const y = this.gameObject.y - 18 + utils.withGrid(6) - cameraPerson.y;
 
     // isLoaded and isShadowLoaded are flags to check if the image has been loaded
     // when we try to draw - make sure we've loaded the image first
