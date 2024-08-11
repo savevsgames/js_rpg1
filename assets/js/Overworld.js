@@ -23,31 +23,23 @@ class Overworld {
     image.src = "/assets/images/maps/DemoLower.png";
     console.log("Overworld initialized");
 
-    // draw a shadow at the hero's feet
-    const shadow = new Image();
-    // copy the code from the image.onload function for hero
-    shadow.onload = () => {
-      this.ctx.drawImage(shadow, 0, 0, 32, 32, x * 16 - 8, y * 16 - 18, 32, 32);
-    };
-    shadow.src = "/assets/images/characters/shadow.png";
+    // PLACE GAME OBJECTS
+    const hero = new GameObject({
+      x: 1,
+      y: 4,
+      src: "/assets/images/characters/people/hero.png",
+    });
 
-    // draw the hero
-    let x = 1;
-    let y = 4;
-    const hero = new Image();
-    hero.onload = () => {
-      this.ctx.drawImage(
-        hero,
-        0, // top corner of the image cutout
-        0, // left corner of the image cutout
-        32, // width of the image cutout
-        32, // height of the image cutout
-        x * 16 - 8, // x position on the canvas - 16 is the width of the tile -then we "nudge" the hero to the left by 8 pixels
-        y * 16 - 18, // y position on the canvas - 16 is the height of the tile -then we "nudge" the hero up by 18 pixels
-        32, // width of the image on the canvas
-        32 // height of the image on the canvas
-      );
-    };
-    hero.src = "/assets/images/characters/people/hero.png";
+    const secondHero = new GameObject({
+      x: 2,
+      y: 4,
+      src: "/assets/images/characters/people/npc1.png",
+    });
+
+    // DRAW GAME OBJECTS - passing in the context to draw the objects
+    setTimeout(() => {
+      hero.sprite.draw(this.ctx);
+      secondHero.sprite.draw(this.ctx);
+    }, 200);
   }
 }
