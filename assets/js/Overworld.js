@@ -45,11 +45,7 @@ class Overworld {
       Object.values(this.map.gameObjects).forEach((object) => {
         //  we will give the object a method to update the object - this will be used to update the object's state
         //  it can take some parameters to help it know what needs to have its state updated
-        //  because the cameraPerson will be neeeded to center the hero, and every other object will move relative to the hero
-        //  we will want to make sure the CameraPerson is passed in before we draw anything
-        object.update({
-          arrow: this.directionInput.direction,
-        });
+
         // this above line will move the objects all to the right as the game loop runs
         // we pass in the cameraPerson so we can center the camera on the hero
         object.sprite.draw(this.ctx, cameraPerson);
