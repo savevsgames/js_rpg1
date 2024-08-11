@@ -57,7 +57,7 @@ class Overworld {
   init() {
     // Now we need to tell the overworld which map to load
     // create a new instance of the OverworldMap class and pass in the config data from the DemoRoom map
-    this.map = new OverworldMap(window.OverworldMaps.Kitchen);
+    this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
 
     // create a new instancee of direction input to handle user input - and initialize it
     this.directionInput = new DirectionInput();

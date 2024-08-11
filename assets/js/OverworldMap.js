@@ -36,11 +36,6 @@ window.OverworldMaps = {
         x: utils.withGrid(6),
         y: utils.withGrid(4),
       }),
-      secondHero: new Person({
-        x: utils.withGrid(4),
-        y: utils.withGrid(7),
-        src: "/assets/images/characters/people/npc1.png",
-      }),
     },
   },
   Kitchen: {

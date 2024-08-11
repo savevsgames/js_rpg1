@@ -11,7 +11,6 @@ You can view the current stage of the RPG1 project [here](https://savevsgames.gi
   - [Introduction](#introduction)
   - [Getting Started](#getting-started)
   - [Features](#features)
-  - [Installation](#installation)
 
 ## Introduction
 
@@ -26,11 +25,3 @@ To get started with this project, you'll need a basic understanding of HTML, CSS
 - **Classic RPG Mechanics**: Implement turn-based battles, character progression, and exploration.
 - **Customizable**: Easily modify and expand the game to include new features and mechanics as development continues.
 - **Unique Theme**: Explore the potential of a pizza chef-themed RPG, or let the theme evolve as the project progresses.
-
-## Installation
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/your-username/rpg1.git
-   cd rpg1
-   ```
