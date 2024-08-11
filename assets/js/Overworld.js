@@ -29,7 +29,7 @@ class Overworld {
       // update all objects in the game - can be a performance issue with a large game
       Object.values(this.map.gameObjects).forEach((object) => {
         //  because the cameraPerson will be neeeded to center the hero, and every other object will move relative to the hero
-        //  we will want to make sure the CameraPerson is passed in before we draw anything
+        //  we will want to make sure the CameraPerson is passed in before we draw anything - this prevents jittering
         object.update({
           arrow: this.directionInput.direction,
           //  we have separated this Object values loop, to first be able to update the hero's position
@@ -43,11 +43,7 @@ class Overworld {
       // loop through the game objects and draw them to this canvas context
       // using Object.values we are taking the values of iteration and not the keys
       Object.values(this.map.gameObjects).forEach((object) => {
-        //  we will give the object a method to update the object - this will be used to update the object's state
-        //  it can take some parameters to help it know what needs to have its state updated
-
-        // this above line will move the objects all to the right as the game loop runs
-        // we pass in the cameraPerson so we can center the camera on the hero
+        // we pass in the cameraPerson so we can place relative to the hero
         object.sprite.draw(this.ctx, cameraPerson);
       });
 
