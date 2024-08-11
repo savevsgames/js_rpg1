@@ -22,6 +22,11 @@ class Overworld {
       // use the clearRect method to clear the canvas with an x, y, (top-left) width, height (screen size) to clear it all
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+      // if we want the camera to follow the hero, we can set the x and y of the camera to the hero's x and y
+      // we will need to subtract half of the canvas width and height to center the hero and then subtract
+      // the hero's position from the canvas and any other objects in the scene, allowing them to move relative to the hero
+      const cameraPerson = this.map.gameObjects.hero;
+
       // start drawning the lower image of the map - passing this.ctx so it knows what to draw to
       this.map.drawLowerImage(this.ctx);
 
