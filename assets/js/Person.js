@@ -28,6 +28,7 @@ class Person extends GameObject {
   //  Call update with the state to take care of the movement
   update(state) {
     this.updatePosition();
+    this.updateSprite(state);
 
     // if there is no moving progress left (last direction has finished) && the state includes an arrow
     //  direction is in the state, so update the direction - if they are a Person
@@ -52,5 +53,30 @@ class Person extends GameObject {
       this[property] += change;
       this.movingProgressRemaining -= 1;
     }
+  }
+
+  //   Update the sprite to animate the character using the state
+  updateSprite(state) {
+    if (!this.isPlayerControlled) {
+      this.sprite.setAnimation(`idle-${this.direction}`);
+    }
+
+    // game object has a this.sprite and this.sprite has a setAnimation method
+    // we will set the animation based on the direction with the key
+    // since we cant do both idle and walk, we will need to add a conditional to check if the character is moving
+    if (
+      this.isPlayerControlled &&
+      this.movingProgressRemaining === 0 &&
+      !state.arrow
+    ) {
+      // this is for when we want to stop the character from moving
+      this.sprite.setAnimation(`idle-${this.direction}`);
+      return;
+    }
+
+    if (this.movingProgressRemaining > 0) {
+      this.sprite.setAnimation(`walk-${this.direction}`);
+    }
+    // this logic will not work for NPCs, so we will need to modify it in the future
   }
 }

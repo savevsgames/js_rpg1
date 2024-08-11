@@ -26,21 +26,43 @@ class Sprite {
     this.animations = config.animations || {
       // current animations by name value and currenetAnimationFrames - frames are arrays of arrays with x and y coordinates
       "idle-down": [[0, 0]],
+      "idle-right": [[0, 1]],
+      "idle-up": [[0, 2]],
+      "idle-left": [[0, 3]],
       "walk-down": [
         [1, 0],
         [0, 0],
         [3, 0],
         [0, 0],
       ],
+      "walk-right": [
+        [1, 1],
+        [0, 1],
+        [3, 1],
+        [0, 1],
+      ],
+      "walk-up": [
+        [1, 2],
+        [0, 2],
+        [3, 2],
+        [0, 2],
+      ],
+      "walk-left": [
+        [1, 3],
+        [0, 3],
+        [3, 3],
+        [0, 3],
+      ],
     };
     // sets the current animation to the default of idle if no animation is passed in
     // this.currentAnimation = config.currentAnimation || "idle-down";
-    this.currentAnimation = "walk-down";
+    this.currentAnimation = "walk-left";
     // sets the current frame to 0 - ie which array within the array of frames is showing => [0,0] is the first frame
     this.currentAnimationFrame = 0;
 
     // to acccount for the element of time we will create a frame limit - cadence of the animation
-    this.animationFrameLimit = config.animationFrameLimit || 16;
+    // set to 8 frames => every 8 frames the sprite sheet cut will change
+    this.animationFrameLimit = config.animationFrameLimit || 8;
     //  we need a way to track progress through the frames still - progress will start high and count down, just like our walking progress
     // this can start at the limit established above and then in the loop, we will decrement it
     this.animationFrameProgress = this.animationFrameLimit;
@@ -49,11 +71,21 @@ class Sprite {
     this.gameObject = config.gameObject;
   }
 
-  //   in order to change the sprite sheet position(ie animate the sprite) we will need to GET the values needed to draw the sprite
+  //  in order to change the sprite sheet position(ie animate the sprite) we will need to GET the values needed to draw the sprite
   //  we need to know which animation we are on, and which frame of the animation we are on - so we can pass the correct values to drawImage
   //  we will create a method to get the current frame
   get frame() {
     return this.animations[this.currentAnimation][this.currentAnimationFrame];
+  }
+
+  // set method that will take an animation key - we use this to actually change the animation of the sprite based on the direction
+  setAnimation(key) {
+    //  we dont want to interrupt the animation if it is already playing
+    if (this.currentAnimation !== key) {
+      this.currentAnimation = key;
+      this.currentAnimationFrame = 0;
+      this.animationFrameProgress = this.animationFrameLimit;
+    }
   }
 
   // in order to actually change the frame when the user is moving and not just draw the same frame over and over, we will need to update the frame
