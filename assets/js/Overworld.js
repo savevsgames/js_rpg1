@@ -30,7 +30,11 @@ class Overworld {
       // loop through the game objects and draw them to this canvas context
       // using Object.values we are taking the values of iteration and not the keys
       Object.values(this.map.gameObjects).forEach((object) => {
-        // object.x += 0.01;
+        //  we will give the object a method to update the object - this will be used to update the object's state
+        //  it can take some parameters to help it know what needs to have its state updated
+        object.update({
+          arrow: this.directionInput.direction,
+        });
         // this above line will move the objects all to the right as the game loop runs
         object.sprite.draw(this.ctx);
       });
@@ -40,6 +44,8 @@ class Overworld {
       // we want this to call every frame, so we will use requestAnimationFrame to call the function recursively
       //  it is a built-in function that will call the function every frame
       requestAnimationFrame(() => {
+        // we will ignore the possible timing issues with step not finishing before being called again and assume it will be fine
+        // we can create a time stamp to check the time between frames and ensure the game runs at the same speed
         // call the step function recursively
         step();
       });
@@ -52,6 +58,12 @@ class Overworld {
     // Now we need to tell the overworld which map to load
     // create a new instance of the OverworldMap class and pass in the config data from the DemoRoom map
     this.map = new OverworldMap(window.OverworldMaps.Kitchen);
+
+    // create a new instancee of direction input to handle user input - and initialize it
+    this.directionInput = new DirectionInput();
+    this.directionInput.init();
+    this.directionInput.direction;
+    console.log(this.directionInput.direction);
 
     // START THE GAME LOOP
     this.startGameLoop();
