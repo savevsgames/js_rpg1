@@ -4,6 +4,7 @@ class OverworldMap {
     // this is how all the maps can be different but the same class can be used
     // we will pass the game objects into the world
     this.gameObjects = config.gameObjects;
+    this.walls = config.walls || {};
 
     // this is the lower and upper map that will be drawn - lower = floor, upper = treetops
     this.lowerImg = new Image();
@@ -31,6 +32,13 @@ class OverworldMap {
       utils.withGrid(6) - cameraPerson.y
     );
   }
+
+  // check if the space is taken by a wall before being allowed to move
+  // take current x and y coordinates and the direction of the object's movement
+  isSpaceTaken(currentX, currentY, direction) {
+    const { x, y } = utils.nextPosition(currentX, currentY, direction);
+    return this.walls[`${x}, ${y}`] || false;
+  }
 }
 
 // this is the configuration for the class instance we are using currently - DemoRoom
@@ -50,6 +58,15 @@ window.OverworldMaps = {
         y: utils.withGrid(7),
         src: "/assets/images/characters/people/npc1.png",
       }),
+    },
+    walls: {
+      // "16, 16": true, - we want to dynamically code this with a utility function - [dynamic key]: true
+      // the utility expression in the array will return a string that will be used as the key
+      // each key will represent x and y coordinates of one point of a wall
+      [utils.asGridCoord(7, 6)]: true,
+      [utils.asGridCoord(8, 6)]: true,
+      [utils.asGridCoord(7, 7)]: true,
+      [utils.asGridCoord(8, 7)]: true,
     },
   },
   Kitchen: {
