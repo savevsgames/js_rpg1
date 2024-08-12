@@ -27,19 +27,50 @@ class Person extends GameObject {
 
   //  Call update with the state to take care of the movement
   update(state) {
-    this.updatePosition();
-    this.updateSprite(state);
+    // moved this from the updatePosition method to here to make sure the character can not move into a wall
+    //  we check if there is progress remaining - if there is - keep moving
+    // if there is no progress remaining, the state includes a behavior with an arrow direction - we use our utility to check if there is a wall
+    // if there is a wall, return - if there is no wall, set the moving progress remaining to 16 - allowing the character to move
 
-    // if there is no moving progress left (last direction has finished) && the state includes an arrow
-    //  direction is in the state, so update the direction - if they are a Person
-    if (
-      this.isPlayerControlled &&
-      this.movingProgressRemaining === 0 &&
-      state.arrow
-    ) {
-      this.direction = state.arrow;
-      // if the space is not taken, move the character
-      console.log(state.map.isSpaceTaken(this.x, this.y, this.direction));
+    if (this.movingProgressRemaining > 0) {
+      this.updatePosition();
+    } else {
+      // CASE: More cases will be added in the future
+      //
+      //
+      // CASE: The character is player controlled and moved with an arrow key while keyboard ready
+      // if there is no moving progress left (last direction has finished) && the state includes an arrow
+      //  direction is in the state, so update the direction - if they are a Person
+      if (
+        this.isPlayerControlled &&
+        // this.movingProgressRemaining === 0 && - this check is not needed any more after refactoring
+        state.arrow
+      ) {
+        // This is a more rubust check than we previously had to ensure that the character CAN move BEFORE they do
+        // here we are creating a new METHOD called startBehavior that will take the state and a behavior object
+        // the behavior object will have a type and a direction (instructions)
+        this.startBehavior(state, {
+          type: "walk",
+          direction: state.arrow,
+        });
+      }
+      this.updateSprite(state);
+    }
+  }
+
+  //  Start the behavior of the Person
+  startBehavior(state, behavior) {
+    // old code -> this.direction = state.arrow; - now we set direction to the behavior direction
+    this.direction = behavior.direction;
+    // currently only walk is supported, so we will check if the behavior is a walk
+    // this functionality allows us to add more behaviors in the future
+    if (behavior.type === "walk") {
+      // check if the space is taken by a wall before being allowed to move
+      if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+        // if the space is taken, return
+        return;
+      }
+      // if the space is not taken, set the moving progress to 16 to allow the character to move 16 pixels (1 grid space)
       this.movingProgressRemaining = 16;
     }
   }
@@ -50,35 +81,19 @@ class Person extends GameObject {
   // update the position of the object by the change amount
   // decrement the moving progress
   updatePosition() {
-    if (this.movingProgressRemaining > 0) {
-      const [property, change] = this.directionUpdate[this.direction];
-      this[property] += change;
-      this.movingProgressRemaining -= 1;
-    }
+    const [property, change] = this.directionUpdate[this.direction];
+    this[property] += change;
+    this.movingProgressRemaining -= 1;
   }
 
-  //   Update the sprite to animate the character using the state
-  updateSprite(state) {
-    if (!this.isPlayerControlled) {
-      this.sprite.setAnimation(`idle-${this.direction}`);
-    }
-
-    // game object has a this.sprite and this.sprite has a setAnimation method
-    // we will set the animation based on the direction with the key
-    // since we cant do both idle and walk, we will need to add a conditional to check if the character is moving
-    if (
-      this.isPlayerControlled &&
-      this.movingProgressRemaining === 0 &&
-      !state.arrow
-    ) {
-      // this is for when we want to stop the character from moving
-      this.sprite.setAnimation(`idle-${this.direction}`);
-      return;
-    }
-
+  //   Update the sprite to animate the character - without needing state!!!
+  updateSprite() {
+    // refactored => if there is progress remaining, set the animation to walk again and return
     if (this.movingProgressRemaining > 0) {
       this.sprite.setAnimation(`walk-${this.direction}`);
+      return;
     }
-    // this logic will not work for NPCs, so we will need to modify it in the future
+    // because we used the return this will only run if there is no progress remaining
+    this.sprite.setAnimation(`idle-${this.direction}`);
   }
 }
