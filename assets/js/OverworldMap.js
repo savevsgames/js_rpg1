@@ -37,6 +37,7 @@ class OverworldMap {
   // take current x and y coordinates and the direction of the object's movement
   isSpaceTaken(currentX, currentY, direction) {
     const { x, y } = utils.nextPosition(currentX, currentY, direction);
+    // if there is a wall at the next position, return true
     return this.walls[`${x}, ${y}`] || false;
   }
 }

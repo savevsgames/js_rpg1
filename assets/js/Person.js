@@ -38,6 +38,8 @@ class Person extends GameObject {
       state.arrow
     ) {
       this.direction = state.arrow;
+      // if the space is not taken, move the character
+      console.log(state.map.isSpaceTaken(this.x, this.y, this.direction));
       this.movingProgressRemaining = 16;
     }
   }

@@ -26,13 +26,14 @@ class Overworld {
       // we will need to subtract half of the canvas width and height to center the hero and then subtract
       // the hero's position from the canvas and any other objects in the scene, allowing them to move relative to the hero
       const cameraPerson = this.map.gameObjects.hero;
-      // update all objects in the game - can be a performance issue with a large game
+      // update all objects in the game - can be a performance issue with a large game - this is our state update function
       Object.values(this.map.gameObjects).forEach((object) => {
         //  because the cameraPerson will be neeeded to center the hero, and every other object will move relative to the hero
         //  we will want to make sure the CameraPerson is passed in before we draw anything - this prevents jittering
         object.update({
           arrow: this.directionInput.direction,
           //  we have separated this Object values loop, to first be able to update the hero's position
+          map: this.map,
         });
       });
 
