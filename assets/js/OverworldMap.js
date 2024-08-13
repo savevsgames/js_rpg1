@@ -59,6 +59,33 @@ class OverworldMap {
     });
   }
 
+  // startCutscene is a method that will be called when a cutscene is triggered - it will take an array of events
+  // it will be an async function
+  async startCutscene(events) {
+    // set the cutscene flag to true
+    this.isCutscenePlaying = true;
+
+    // START A LOOP OF ASYNC EVENTS and AWAIT each one
+    for (let i = 0; i < events.length; i++) {
+      // get the event from the events array and create a "handler" - a new instance of the OverworldEvent class
+      // pass in a map and the event from the events array
+      const eventHandler = new OverworldEvent({ map: this, event: events[i] });
+      // this is where we will await the event to finish before moving on to the next event
+      await eventHandler.init();
+      // this means the loop will have to wait for each event to finish before moving on to the next one!!!!
+      // this is how we can create a cutscene that plays out one event at a time
+    }
+
+    // when the scene is over - set the cutscene flag to false
+    this.isCutscenePlaying = false;
+
+    // reset the behavior loop index for all objects
+    Object.values(this.gameObjects).forEach((object) => {
+      // the behaviorEvent method needs the map passed in for each object
+      object.doBehaviorEvent(this);
+    });
+  }
+
   // functions to add and remove walls
   // if no wall exists at that position, add it to the object (this.walls)
   addWall(x, y) {
@@ -87,20 +114,20 @@ window.OverworldMaps = {
       // default src is hero's image source
       hero: new Person({
         isPlayerControlled: true,
-        x: utils.withGrid(9),
-        y: utils.withGrid(5),
+        x: utils.withGrid(2),
+        y: utils.withGrid(8),
       }),
       npcA: new Person({
-        x: utils.withGrid(4),
-        y: utils.withGrid(7),
+        x: utils.withGrid(6),
+        y: utils.withGrid(9),
         src: "/assets/images/characters/people/npc1.png",
         // idle behavior loop
         behaviorLoop: [
           { type: "walk", direction: "left" },
-          // { type: "stand", direction: "up", time: 1000 },
+          { type: "stand", direction: "up", time: 1000 },
           { type: "walk", direction: "up" },
           { type: "walk", direction: "right" },
-          // { type: "stand", direction: "down", time: 1000 },
+          { type: "stand", direction: "down", time: 1000 },
           { type: "walk", direction: "down" },
         ],
       }),

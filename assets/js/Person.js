@@ -11,6 +11,8 @@ class Person extends GameObject {
 
     // set the starting progress remaining to 0 so that the character can be moved with an arrow key
     this.movingProgressRemaining = 0;
+    // just like for moving, we need to make sure the character does not start standing while already standing
+    this.isStanding = false;
 
     // add a flag for whether the Person is a player or not - default to false
     this.isPlayerControlled = config.isPlayerControlled || false;
@@ -40,8 +42,9 @@ class Person extends GameObject {
       //
       // CASE: The character is player controlled and moved with an arrow key while keyboard ready
       // if there is no moving progress left (last direction has finished) && the state includes an arrow
-      //  direction is in the state, so update the direction - if they are a Person
+      //  direction is in the state, so update the direction - if they are a Person && the map is not playing a cutscene
       if (
+        !state.map.isCutscenePlaying &&
         this.isPlayerControlled &&
         // this.movingProgressRemaining === 0 && - this check is not needed any more after refactoring
         state.arrow
@@ -88,9 +91,12 @@ class Person extends GameObject {
     // handle the case where the behavior is stand
     if (behavior.type === "stand") {
       console.log("standing");
+      this.isStanding = true;
       // we will use a setTimeout to set how long the standing should last, the time property will be in the behavior object
       setTimeout(() => {
         utils.emitEvent("personStandingComplete", { whoId: this.id });
+        // when the time is up, set the isStanding flag to false
+        this.isStanding = false;
       }, behavior.time);
     }
   }
