@@ -7,8 +7,20 @@
   --success-color: #28a745;
   --info-color: #17a2b8;
   --warning-color: #ffc107;
-  --font-size: 1rem;
-  --line-height: 1.6;
+
+  --border-color: #333;
+  --dialog-background: #918878;
+
+  --menu-background: #86735b;
+  --menu-border-color: #e0c83b;
+  --menu-font-color: #24231e;
+  --menu-selected-background: #3bc7e0;
+
+ 
+  
+}
+
+* {
   box-sizing: border-box;
 }
 
@@ -16,7 +28,7 @@ body {
   background-color: #333b41;
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Press Start 2P', cursive;
   /* Arrow keys will trigger scrolling in browsers, so we set overflow 
   to hidden to the body itself so that does not happen */
   overflow-x: hidden;

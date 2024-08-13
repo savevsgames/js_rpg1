@@ -114,12 +114,12 @@ window.OverworldMaps = {
       // default src is hero's image source
       hero: new Person({
         isPlayerControlled: true,
-        x: utils.withGrid(2),
-        y: utils.withGrid(8),
+        x: utils.withGrid(1),
+        y: utils.withGrid(10),
       }),
       npcA: new Person({
-        x: utils.withGrid(6),
-        y: utils.withGrid(9),
+        x: utils.withGrid(10),
+        y: utils.withGrid(10),
         src: "/assets/images/characters/people/npc1.png",
         // idle behavior loop
         behaviorLoop: [

@@ -63,6 +63,17 @@ class OverworldEvent {
     document.addEventListener("personWalkingComplete", completeHandler);
   }
 
+  // creating a TextMessage event
+  // takes in some text and a "thing" that should happen whenever we have seen the text
+  textMessage(resolve) {
+    const message = new TextMessage({
+      text: this.event.text,
+      onCompleteCallback: () => resolve(),
+    });
+    // This works with the init method below to create the element and append it to the game-container
+    message.init(document.querySelector(".game-container"));
+  }
+
   init() {
     // this will be the method that is called to start the event - kick off one of the instructional methods
     return new Promise((resolve) => {
