@@ -12,6 +12,8 @@ class OverworldMap {
     this.upperImg = new Image();
     this.upperImg.src = config.upperSrc;
 
+    this.isCutscenePlaying = false;
+
     // the map will be drawn into the canvas element - but must be drawn in the correct order
   }
 
@@ -40,6 +42,40 @@ class OverworldMap {
     // if there is a wall at the next position, return true
     return this.walls[`${x}, ${y}`] || false;
   }
+
+  // mount objects is a method that will mount the game objects to the map
+  // this will be called when the map "starts"
+  mountObjects() {
+    // loop through the game objects values (not values anymore, because we want to also know their id's) and mount them to the map
+    Object.keys(this.gameObjects).forEach((key) => {
+      // get the object from the gameObjects object associated with that instance of the key
+      let object = this.gameObjects[key];
+      // set the object's id to the key - rather than needing an id parameter in the object when we create a gameObjects object
+      // ie. hero: new Person({ id: "hero" }) - we can just set the id to the key
+      object.id = key;
+      // TODO: determine if the object should be mounted
+      // object.mount to this which is the map in this case
+      object.mount(this);
+    });
+  }
+
+  // functions to add and remove walls
+  // if no wall exists at that position, add it to the object (this.walls)
+  addWall(x, y) {
+    this.walls[`${x}, ${y}`] = true;
+  }
+  // if a wall exists at that position, remove it from the object (this.walls)
+  removeWall(x, y) {
+    delete this.walls[`${x}, ${y}`];
+  }
+  // when a wall needs to be moved, remove the wall and add it to the new position using the utility function
+  moveWall(wasX, wasY, direction) {
+    this.removeWall(wasX, wasY);
+    // get the new x and y coordinates using the utility function we created for moving characters
+    const { x, y } = utils.nextPosition(wasX, wasY, direction);
+    // add a wall at the new position determined by the direction
+    this.addWall(x, y);
+  }
 }
 
 // this is the configuration for the class instance we are using currently - DemoRoom
@@ -51,13 +87,33 @@ window.OverworldMaps = {
       // default src is hero's image source
       hero: new Person({
         isPlayerControlled: true,
-        x: utils.withGrid(6),
-        y: utils.withGrid(4),
+        x: utils.withGrid(9),
+        y: utils.withGrid(5),
       }),
-      npc1: new Person({
+      npcA: new Person({
         x: utils.withGrid(4),
         y: utils.withGrid(7),
         src: "/assets/images/characters/people/npc1.png",
+        // idle behavior loop
+        behaviorLoop: [
+          { type: "walk", direction: "left" },
+          // { type: "stand", direction: "up", time: 1000 },
+          { type: "walk", direction: "up" },
+          { type: "walk", direction: "right" },
+          // { type: "stand", direction: "down", time: 1000 },
+          { type: "walk", direction: "down" },
+        ],
+      }),
+      npcB: new Person({
+        x: utils.withGrid(2),
+        y: utils.withGrid(6),
+        src: "/assets/images/characters/people/npc2.png",
+        behaviorLoop: [
+          { type: "stand", direction: "down", time: 1000 },
+          { type: "stand", direction: "left", time: 1000 },
+          { type: "stand", direction: "up", time: 1000 },
+          { type: "stand", direction: "right", time: 1000 },
+        ],
       }),
     },
     walls: {
