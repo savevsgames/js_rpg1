@@ -42,6 +42,9 @@ class OverworldEvent {
       {
         type: "walk",
         direction: this.event.direction,
+        // if they hit a wall, they will retry the walk - in case it was created a player or npc and that wall is now gone
+        // this walk event type is "consumed" in Person.js -> startBehavior - walk
+        retry: true,
       }
     );
 

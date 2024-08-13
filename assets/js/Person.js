@@ -67,7 +67,13 @@ class Person extends GameObject {
     if (behavior.type === "walk") {
       // check if the space is taken by a wall before being allowed to move
       if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
-        // if the space is taken, return
+        // if the space is taken, set a timeout to retry the walk, then return if the space is taken
+        behavior.retry &&
+          setTimeout(() => {
+            // this creates an infinite loop of retrying the walk if the space is taken every 10ms
+            // until the await is resolved in the OverworldEvent.js -> walk method this will keep trying to walk
+            this.startBehavior(state, behavior);
+          }, 10);
         return;
       }
       // before we start walking - let's move the wall
