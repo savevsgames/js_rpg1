@@ -40,8 +40,9 @@ class Person extends GameObject {
       //
       // CASE: The character is player controlled and moved with an arrow key while keyboard ready
       // if there is no moving progress left (last direction has finished) && the state includes an arrow
-      //  direction is in the state, so update the direction - if they are a Person
+      //  direction is in the state, so update the direction - if they are a Person && the map is not playing a cutscene
       if (
+        !state.map.isCutscenePlaying &&
         this.isPlayerControlled &&
         // this.movingProgressRemaining === 0 && - this check is not needed any more after refactoring
         state.arrow

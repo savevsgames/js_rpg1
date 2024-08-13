@@ -86,5 +86,33 @@ class Overworld {
 
     // START THE GAME LOOP
     this.startGameLoop();
+
+    // TEST A CUTSCENE
+    // this.map.startCutscene([
+    //   { who: "hero", type: "walk", direction: "right" },
+    //   { who: "hero", type: "walk", direction: "up" },
+    //   { who: "npcB", type: "walk", direction: "right" },
+    //   { who: "npcB", type: "walk", direction: "up" },
+    //   { who: "hero", type: "walk", direction: "right" },
+    //   { who: "hero", type: "walk", direction: "up" },
+    //   { who: "hero", type: "walk", direction: "right" },
+    //   { who: "hero", type: "walk", direction: "up" },
+    //   { who: "npcB", type: "walk", direction: "right" },
+    //   { who: "npcB", type: "walk", direction: "up" },
+    //   { who: "hero", type: "walk", direction: "right" },
+    //   { who: "hero", type: "walk", direction: "up" },
+    //   { who: "hero", type: "walk", direction: "left" },
+    //   { who: "hero", type: "walk", direction: "down" },
+    //   { who: "npcB", type: "walk", direction: "down" },
+    //   { who: "npcB", type: "walk", direction: "left" },
+    //   { who: "hero", type: "walk", direction: "down" },
+    //   { who: "hero", type: "walk", direction: "left" },
+    //   { who: "hero", type: "walk", direction: "down" },
+    //   { who: "hero", type: "walk", direction: "left" },
+    //   { who: "hero", type: "walk", direction: "down" },
+    //   { who: "npcB", type: "walk", direction: "left" },
+    //   { who: "npcB", type: "walk", direction: "down" },
+
+    // ]);
   }
 }
