@@ -40,7 +40,7 @@ class GameObject {
 
   // this function will take in the map and the behaviorLoop and use the index of the behaviorLoop to determine the behavior
   async doBehaviorEvent(map) {
-    if (map.isCutscenePlaying || this.behaviorLoop.length === 0) {
+    if (this.isStanding || map.isCutscenePlaying || this.behaviorLoop.length === 0) {
       // if a cutscene is playing, or theobject does not have a behavior event, then we will return
       // isCutscenePlaying is a property defined in the OverworldMap class
       return;

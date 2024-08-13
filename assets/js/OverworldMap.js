@@ -78,6 +78,12 @@ class OverworldMap {
 
     // when the scene is over - set the cutscene flag to false
     this.isCutscenePlaying = false;
+
+    // reset the behavior loop index for all objects
+    Object.values(this.gameObjects).forEach((object) => {
+      // the behaviorEvent method needs the map passed in for each object
+      object.doBehaviorEvent(this);
+    });
   }
 
   // functions to add and remove walls
