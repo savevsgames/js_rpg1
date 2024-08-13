@@ -43,10 +43,17 @@ class Overworld {
       // we have an object (gameObjects) of objects within the map object
       // loop through the game objects and draw them to this canvas context
       // using Object.values we are taking the values of iteration and not the keys
-      Object.values(this.map.gameObjects).forEach((object) => {
-        // we pass in the cameraPerson so we can place relative to the hero
-        object.sprite.draw(this.ctx, cameraPerson);
-      });
+      Object.values(this.map.gameObjects)
+        .sort((a, b) => {
+          // sort will return positive if the order is correct and negative if it is not - this will re-order the array
+          // to place the lower y value objects at the front of the array - this will draw them first. Essentially this
+          // draws the objects in a North to South order.
+          return a.y - b.y;
+        })
+        .forEach((object) => {
+          // we pass in the cameraPerson so we can place relative to the hero
+          object.sprite.draw(this.ctx, cameraPerson);
+        });
 
       // draw the upper image of the map - this will draw on top of the other game objects
       this.map.drawUpperImage(this.ctx, cameraPerson);
