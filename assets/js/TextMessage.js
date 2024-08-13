@@ -19,6 +19,13 @@ class TextMessage {
         // close the text message
         this.done();
       });
+
+    // Now that we have created a KeyPressListener class, we can use it to listen for keys to close the text message
+    this.actionListener = new KeyPressListener("Enter", () => {
+      console.log("Enter key pressed!!!!");
+      // this.done();
+      console.log("Enter key released!!!!");
+    });
   }
 
   done() {
