@@ -68,7 +68,8 @@ class Overworld {
     // Now we need to tell the overworld which map to load
     // create a new instance of the OverworldMap class and pass in the config data from the DemoRoom map
     this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
-    // console.log(this.map.walls);
+    // mount the objects to the map - in OverworldMap.js
+    this.map.mountObjects();
 
     // create a new instancee of direction input to handle user input - and initialize it
     this.directionInput = new DirectionInput();

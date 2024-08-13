@@ -70,8 +70,22 @@ class Person extends GameObject {
         // if the space is taken, return
         return;
       }
+      // before we start walking - let's move the wall
+      // essentially - every time the character moves, we will move the wall created by the character's map mounting along with them
+      state.map.moveWall(this.x, this.y, this.direction);
       // if the space is not taken, set the moving progress to 16 to allow the character to move 16 pixels (1 grid space)
       this.movingProgressRemaining = 16;
+      // now that we have set the moving progress, we can update the sprite to animate the character
+      this.updateSprite(state);
+    }
+
+    // handle the case where the behavior is stand
+    if (behavior.type === "stand") {
+      console.log("standing");
+      // we will use a setTimeout to set how long the standing should last, the time property will be in the behavior object
+      setTimeout(() => {
+        utils.emitEvent("personStandingComplete", { whoId: this.id });
+      }, behavior.time);
     }
   }
 
@@ -83,7 +97,16 @@ class Person extends GameObject {
   updatePosition() {
     const [property, change] = this.directionUpdate[this.direction];
     this[property] += change;
+
+    // decrement the moving progress
     this.movingProgressRemaining -= 1;
+    // then we need a way to tell other objects that the position has changed
+    if (this.movingProgressRemaining === 0) {
+      // we have finished moving so we can fire off a signal that other objects can listen to
+      // to do this we will use a NATIVE BROWSER API called the CustomEvent API
+      //  we created a utility function that will emit an event for browser handling with an event name and detail
+      utils.emitEvent("personWalkingComplete", { whoId: this.id });
+    }
   }
 
   //   Update the sprite to animate the character - without needing state!!!

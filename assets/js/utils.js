@@ -26,4 +26,16 @@ const utils = {
     // return an object with the next x and y coordinates
     return { x, y };
   },
+
+  // a CustomEvent utility function that will emit an event for browser handling with a name and detail
+  emitEvent(name, detail) {
+    // ex. we have finished moving so we can fire off a signal that other objects can listen to
+    // to do this we will use a NATIVE BROWSER API called the CustomEvent API
+    const event = new CustomEvent(name, {
+      // "detail" is a more detailed configuration object that tells us more about the event - ex. whoId in a walking method (who is walking)
+      detail,
+    });
+    // "dispatch" the event on the document
+    document.dispatchEvent(event);
+  },
 };
