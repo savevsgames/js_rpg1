@@ -17,6 +17,14 @@
     z-index: 2;
 }
 
+.TextMessage span {
+    opacity: 0;
+}
+
+.TextMessage span.revealed {
+    opacity: 1;
+}
+
 
 /* 12px font and button reset styles */
 .TextMessage_button {

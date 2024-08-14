@@ -66,12 +66,27 @@ class OverworldEvent {
   // creating a TextMessage event
   // takes in some text and a "thing" that should happen whenever we have seen the text
   textMessage(resolve) {
+    // add a check to make sure the actor is facing the right direction to speak with the hero
+    if (this.event.faceHero) {
+      // get the object that is speaking
+      const object = this.map.gameObjects[this.event.faceHero];
+      // have them face the opposite direction of the hero (ie speak to the hero)
+      object.direction = utils.oppositeDirection(
+        this.map.gameObjects["hero"].direction
+      );
+    }
+
     const message = new TextMessage({
       text: this.event.text,
       onComplete: () => resolve(),
     });
     // This works with the init method below to create the element and append it to the game-container
     message.init(document.querySelector(".game-container"));
+  }
+
+  changeMap(resolve) {
+    this.map.overworld.startMap(window.OverworldMaps[this.event.map]);
+    resolve();
   }
 
   init() {

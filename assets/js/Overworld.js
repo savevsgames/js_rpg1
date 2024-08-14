@@ -71,17 +71,50 @@ class Overworld {
     step();
   }
 
-  init() {
-    // Now we need to tell the overworld which map to load
-    // create a new instance of the OverworldMap class and pass in the config data from the DemoRoom map
-    this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
+  //  OverworldMap will change out, but Overworld will remain the same - so we can leave this binding here
+  bindActionInput() {
+    new KeyPressListener("Enter", () => {
+      // is there a person here for us to talk to?
+      this.map.checkForActionCutscene();
+    });
+  }
+
+  bindHeroPositionCheck() {
+    // this is where we we LISTEN for the hero's position to change
+    document.addEventListener("personWalkingComplete", (event) => {
+      if (event.detail.whoId === "hero") {
+        // the hero has moved
+        this.map.checkForFootstepCutscene();
+      }
+    });
+  }
+
+  startMap(mapConfig) {
+    //  we want to be able to start maps without starting the game loop again, so we will call this method
+    //  this will be called in the OverworldMap.js file
+
+    // We need to tell the overworld which map to load
+    // create a new instance of the OverworldMap class and pass in the config data from the "DemoRoom" map
+    this.map = new OverworldMap(mapConfig);
+    // set the overworld reference to itself
+    this.map.overworld = this;
     // mount the objects to the map - in OverworldMap.js
     this.map.mountObjects();
+  }
+
+  init() {
+    // now we can call the startMap method to start the game - passing in the map we want to start
+    this.startMap(window.OverworldMaps.Kitchen);
+
+    // this binds the Enter key so it can be used to interact with objects in the game
+    this.bindActionInput();
+
+    this.bindHeroPositionCheck();
 
     // create a new instancee of direction input to handle user input - and initialize it
     this.directionInput = new DirectionInput();
     this.directionInput.init();
-    this.directionInput.direction;
+    // this.directionInput.direction;
     // console.log(this.directionInput.direction);
 
     // START THE GAME LOOP
@@ -89,36 +122,10 @@ class Overworld {
 
     // TEST A CUTSCENE
     this.map.startCutscene([
-      { type: "textMessage", text: "Welcome to Shadowtide Keep Kitchens" },
-      { who: "npcA", type: "walk", direction: "left" },
-      { who: "npcA", type: "stand", direction: "left", time: 500 },
-      { who: "hero", type: "walk", direction: "right" },
-      { who: "hero", type: "stand", direction: "right", time: 500 },
-      { who: "npcA",  type: "walk", direction: "left"},
-      { who: "npcA", type: "stand", direction: "left", time: 500 },
-      { who: "hero", type: "walk", direction: "right" },
-      { who: "hero", type: "stand", direction: "right", time: 500 },
-      { who: "npcA", type: "walk", direction: "left" },
-      { who: "npcA", type: "stand", direction: "left", time: 500 },
-      { who: "hero", type: "walk", direction: "right" },
-      { who: "hero", type: "stand", direction: "right", time: 500 },
-      { who: "npcA", type: "walk", direction: "left" },
-      { who: "npcA", type: "stand", direction: "left", time: 1000 },
-      { who: "hero", type: "walk", direction: "right" },
-      { who: "hero", type: "stand", direction: "right", time: 1000 },
-      
-      { type: "textMessage", text: "Youre on your own now!" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "hero", type: "stand", direction: "up", time: 2000 },
-      { who: "npcA", type: "walk", direction: "right" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "npcA", type: "walk", direction: "up" },
-      { who: "hero", type: "stand", direction: "down", time: 2000 },
+      {
+        type: "textMessage",
+        text: "Welcome to Shadowtide Keep Kitchens. The rats are running free. Grab them!",
+      },
     ]);
   }
 }

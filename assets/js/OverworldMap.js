@@ -1,5 +1,7 @@
 class OverworldMap {
   constructor(config) {
+    // we need a reference to the overworld itself - for calling methods on the overworld
+    this.overworld = null;
     // give the constructor a config object to pass in the map and game objects
     // this is how all the maps can be different but the same class can be used
     // we will pass the game objects into the world
@@ -13,6 +15,8 @@ class OverworldMap {
     this.upperImg.src = config.upperSrc;
 
     this.isCutscenePlaying = false;
+
+    this.cutsceneSpaces = config.cutsceneSpaces || {};
 
     // the map will be drawn into the canvas element - but must be drawn in the correct order
   }
@@ -86,6 +90,30 @@ class OverworldMap {
     });
   }
 
+  // this is a method to test if a cutscene should be started - it will use the nextPosition utility function to check if the hero is facing an NPC
+  // or interactive gameObject, and if so, it will trigger the cutscene
+  checkForActionCutscene() {
+    const hero = this.gameObjects["hero"];
+    // let's check if the hero is facing an NPC
+    const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
+    // now that we know the coords in front of our hero, lets see if there is a game object there, and if they have a cutscene attached
+    const match = Object.values(this.gameObjects).find((object) => {
+      return `${object.x}, ${object.y}` === `${nextCoords.x}, ${nextCoords.y}`;
+    });
+    if (!this.isCutscenePlaying && match && match.talking.length) {
+      this.startCutscene(match.talking[0].events);
+    }
+  }
+
+  checkForFootstepCutscene() {
+    const hero = this.gameObjects["hero"];
+    const match = this.cutsceneSpaces[`${hero.x}, ${hero.y}`];
+    // As we walk around we want to basically scan for a match in the cutsceneSpaces object
+    if (!this.isCutscenePlaying && match) {
+      this.startCutscene(match[0].events);
+    }
+  }
+
   // functions to add and remove walls
   // if no wall exists at that position, add it to the object (this.walls)
   addWall(x, y) {
@@ -123,6 +151,10 @@ window.OverworldMaps = {
         src: "/assets/images/characters/people/npc1.png",
         // idle behavior loop
         behaviorLoop: [
+          { type: "stand", direction: "down", time: 1000 },
+          { type: "stand", direction: "left", time: 1000 },
+          { type: "stand", direction: "up", time: 1000 },
+          { type: "stand", direction: "right", time: 1000 },
           { type: "walk", direction: "left" },
           { type: "stand", direction: "up", time: 1000 },
           { type: "walk", direction: "up" },
@@ -130,17 +162,28 @@ window.OverworldMaps = {
           { type: "stand", direction: "down", time: 1000 },
           { type: "walk", direction: "down" },
         ],
+        talking: [
+          {
+            events: [
+              {
+                type: "textMessage",
+                text: "Hello, I am NPC A!",
+                faceHero: "npcA",
+              },
+              { type: "textMessage", text: "NPC B is over there..." },
+              {
+                type: "textMessage",
+                text: "I think they must be dizzy by now.",
+              },
+            ],
+          },
+        ],
       }),
       npcB: new Person({
-        x: utils.withGrid(2),
-        y: utils.withGrid(6),
+        x: utils.withGrid(8),
+        y: utils.withGrid(5),
         src: "/assets/images/characters/people/npc2.png",
-        behaviorLoop: [
-          { type: "stand", direction: "down", time: 1000 },
-          { type: "stand", direction: "left", time: 1000 },
-          { type: "stand", direction: "up", time: 1000 },
-          { type: "stand", direction: "right", time: 1000 },
-        ],
+        behaviorLoop: [{ type: "stand", direction: "left", time: 1000 }],
       }),
     },
     walls: {
@@ -151,6 +194,30 @@ window.OverworldMaps = {
       [utils.asGridCoord(8, 6)]: true,
       [utils.asGridCoord(7, 7)]: true,
       [utils.asGridCoord(8, 7)]: true,
+    },
+    // create a bucket for cutscenes
+    cutsceneSpaces: {
+      // use the space's coordinates as the key
+      [utils.asGridCoord(7, 4)]: [
+        {
+          events: [
+            { who: "npcB", type: "walk", direction: "left" },
+            { who: "npcB", type: "stand", direction: "up", time: 500 },
+            {
+              type: "textMessage",
+              text: "I am NPC B! I didn't tell you that you could go in there!",
+            },
+            { who: "npcB", type: "walk", direction: "right" },
+            { who: "hero", type: "walk", direction: "down" },
+            { who: "hero", type: "walk", direction: "left" },
+          ],
+        },
+      ],
+      [utils.asGridCoord(5, 10)]: [
+        {
+          events: [{ type: "changeMap", map: "Kitchen" }],
+        },
+      ],
     },
   },
   Kitchen: {
@@ -164,14 +231,20 @@ window.OverworldMaps = {
         y: utils.withGrid(4),
       }),
       npcA: new Person({
-        x: utils.withGrid(4),
-        y: utils.withGrid(7),
-        src: "/assets/images/characters/people/npc1.png",
-      }),
-      npcB: new Person({
         x: utils.withGrid(10),
-        y: utils.withGrid(6),
-        src: "/assets/images/characters/people/npc2.png",
+        y: utils.withGrid(8),
+        src: "/assets/images/characters/people/npc3.png",
+        talking: [
+          {
+            events: [
+              {
+                type: "textMessage",
+                text: "You made it to the kitchen!",
+                faceHero: "npcA",
+              },
+            ],
+          },
+        ],
       }),
     },
   },

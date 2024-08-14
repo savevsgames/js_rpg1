@@ -26,6 +26,19 @@ const utils = {
     // return an object with the next x and y coordinates
     return { x, y };
   },
+  oppositeDirection(direction) {
+    if (direction === "left") {
+      return "right";
+    } else if (direction === "right") {
+      return "left";
+    } else if (direction === "up") {
+      return "down";
+    } else {
+      return "up";
+    }
+  },
+
+  // oppositeDirection is a function that takes a direction and returns the opposite direction.
 
   // a CustomEvent utility function that will emit an event for browser handling with a name and detail
   emitEvent(name, detail) {
