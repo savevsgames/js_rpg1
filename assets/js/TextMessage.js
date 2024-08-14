@@ -1,8 +1,8 @@
 class TextMessage {
   // this constructor takes 1 OBJECT, with 2 properties as a parameter!!!!
-  constructor({ text, onCompleteCallback }) {
+  constructor({ text, onComplete }) {
     this.text = text;
-    this.onCompleteCallback = onCompleteCallback;
+    this.onComplete = onComplete;
     this.element = null;
   }
 
@@ -22,17 +22,18 @@ class TextMessage {
 
     // Now that we have created a KeyPressListener class, we can use it to listen for keys to close the text message
     this.actionListener = new KeyPressListener("Enter", () => {
+      // unbind the key listener - this is because the element is being removed from the DOM so we don't want to keep listening
+      this.actionListener.unbind();
       console.log("Enter key pressed!!!!");
-      // this.done();
-      console.log("Enter key released!!!!");
+      this.done();
     });
   }
 
   done() {
     // remove the element from the DOM
     this.element.remove();
-    // call the onCompleteCallback
-    this.onCompleteCallback();
+    // call the onComplete
+    this.onComplete();
   }
 
   init(container) {

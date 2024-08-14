@@ -68,7 +68,7 @@ class OverworldEvent {
   textMessage(resolve) {
     const message = new TextMessage({
       text: this.event.text,
-      onCompleteCallback: () => resolve(),
+      onComplete: () => resolve(),
     });
     // This works with the init method below to create the element and append it to the game-container
     message.init(document.querySelector(".game-container"));

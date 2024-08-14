@@ -94,7 +94,7 @@ class Overworld {
       { who: "npcA", type: "stand", direction: "left", time: 500 },
       { who: "hero", type: "walk", direction: "right" },
       { who: "hero", type: "stand", direction: "right", time: 500 },
-      { who: "npcA", type: "walk", direction: "left" },
+      { who: "npcA",  type: "walk", direction: "left"},
       { who: "npcA", type: "stand", direction: "left", time: 500 },
       { who: "hero", type: "walk", direction: "right" },
       { who: "hero", type: "stand", direction: "right", time: 500 },

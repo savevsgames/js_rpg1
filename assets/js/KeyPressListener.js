@@ -7,15 +7,16 @@ class KeyPressListener {
     //  each of these functions will be bound to the keyCode that we listen to
     // this allows us to set keySafe to false once the key is pressed, and then set it back to true once the key is released
     this.keydownFunction = function (event) {
-      if (event.keyCode === keyCode) {
+      if (event.code === keyCode) {
         if (this.keySafe) {
+          this.keySafe = false;
           callback();
         }
       }
     };
 
     this.keyupFunction = function (event) {
-      if (event.keyCode === keyCode) {
+      if (event.code === keyCode) {
         this.keySafe = true;
       }
     };
